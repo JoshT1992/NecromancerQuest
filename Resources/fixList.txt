@@ -1,0 +1,6 @@
+-player moving into enemies sends them on a journey and freezes them
+-player camera is shit
+-ordering units into places they can't go does mysterious things
+-when a unit is finding the nearest target they should do so by path distance
+-vision maybe with rays
+-uncover the mysteries of the object list in selectionController

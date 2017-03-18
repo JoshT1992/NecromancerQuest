@@ -1,0 +1,104 @@
+Stats:
+	Health
+	Power
+	Speed
+	Atk_Speed
+	Armour
+	
+Types of Attacks:
+	Melee or Ranged?
+	Single or AoE?
+	Physial or Magic?
+	
+Magic ignores armour, but is typically weaker.
+	
+Currency? or magic crystals? some sort of scrap mechanic. Maybe souls.
+
+Types of units
+	Zombie
+	Guard
+	Wizard
+	Archer
+	
+Maybe units have a star rating for their level. One to five stars? End game maybe
+have two five star units on average.
+
+Players have max zombie count, a zombie conversion rate.
+Players have a gear capacity. Stats based solely on equipment.
+Spells take up slots, like how weapons took up power. Spells have cool down.
+Maximum four spells equipped at one time regardless of slots.
+Magic points determine how many spells you can cast per day, get refreshed at
+the start of each day. Maximum is upgradable.
+Spells cost between 0-3 mp. Spells that cost 0mp are cantrips. Spells
+that cost 3mp are devastating spells. Getting one is super lucky.
+
+Different classes for the main player
+	Necromancer (Vivianna)
+		Higher chance to raise undead, but low charisma
+	Lich (Lyle)
+		Can't raise their own undead initially, but has the ability to steal others
+	Ghoul (Scarrow)
+		Starts with Fighter, but no spells
+	Adam (Skelingtons)
+		Summons skeletons instead, starts with low skeleton chance
+
+
+Player Resources
+	Zombies (Everyone starts with 10 initially)
+	Magic Points (Everyone start with 3 initially)
+	Food
+	(?)Currency(?)
+
+Player Upgradables
+	Zombie Capacity
+	Zombie Raise Chance
+	Charisma
+	Magic Point Capacity
+	Spell Slots
+	
+Special Upgrade List
+	Zombie Stealing (% Chance when used in battle, has charge time)
+	Fighter (Gives melee attack for battle, has charge time)
+	
+
+Player Controls
+	Move
+	Pause time to give orders (camera flies up into an RTS view)
+	Cast a spell (If it's charged)
+	Rolling // Dodging
+	Blocking(?)
+	
+All attacks should be done through an ability controller. A list of abilities should also be kept in a separate file.
+Spells are kept in one file, weapons in another.
+
+Spell Attributes
+	Index Number
+	Name
+	Cost(mp)
+	Power
+	Shots
+	chargeTime
+	isArea
+	isRanged
+	isPiercing
+	isCold
+
+How to Scale Spell damage
+	0 mp: 1 damage per 5 seconds charged (Lesser Magic)
+	1 mp: 3 damage per 5 seconds charged (Magic)
+	2 mp: 5 damage per 5 seconds charged (Greater Magic)
+	3 mp: 7 damage per 5 seconds charged (Extreme Magic)
+	
+	
+Each unit under control of a wizard contributes towards a shield maybe? Like you have to defeat the wizard's army before you can face off with them directly.
+
+Events are randomized things like in FTL. Instead of shops you find towns.
+Towns obviously have shops in them, but events can also happen at towns.
+Combat events are where you face another wizard or commander
+Like FTL, they have access to the same equipment and what not you do
+You obviously have way more health, probably better equipment, and
+special upgrades
+
+(?)Augment(?) List
+	Assures at least 1 zombie will be made every combat
+	Can recycle dead zombies for food

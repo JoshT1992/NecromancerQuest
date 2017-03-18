@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<spell_book>
+<spell>
+	<name>Lesser Magic Bolt</name>
+	<cost>0</cost>
+	<power>1</power>
+	<attacks>2</attacks>
+	<charge>10</charge>
+	<isArea>false</isArea>
+	<isRanged>true</isRanged>
+	<isPiercing>true</isPiercing>
+	<isCold>false</isCold>
+</spell>
+<spell>
+	<name>Magic Bolt</name>
+	<cost>1</cost>
+	<power>2</power>
+	<attacks>3</attacks>
+	<charge>10</charge>
+	<isArea>false</isArea>
+	<isRanged>true</isRanged>
+	<isPiercing>true</isPiercing>
+	<isCold>false</isCold>
+</spell>
+<spell>
+	<name>Greater Magic Bolt</name>
+	<cost>2</cost>
+	<power>2</power>
+	<attacks>5</attacks>
+	<charge>10</charge>
+	<isArea>false</isArea>
+	<isRanged>true</isRanged>
+	<isPiercing>true</isPiercing>
+	<isCold>false</isCold>
+</spell>
+<spell>
+	<name>Extreme Magic Bolt</name>
+	<cost>3</cost>
+	<power>2</power>
+	<attacks>7</attacks>
+	<charge>10</charge>
+	<isArea>false</isArea>
+	<isRanged>true</isRanged>
+	<isPiercing>true</isPiercing>
+	<isCold>false</isCold>
+</spell>
+</spell_book>
