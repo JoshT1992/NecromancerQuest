@@ -10,31 +10,55 @@ public class CameraController : MonoBehaviour {
 	
 	private float dx;//, dy;
 	
-	private float rSpeed = 1.0f;
-
-	private bool resetCurs;
+	private float rSpeed = 0.2f;
 	
 	private Vector3 offset;
+
+	private float leftSide = Screen.width*0.15f;
+	private float rightSide = Screen.width*0.85f;
+
+
+	//private bool resetCurs;
+	//private bool leftTurn;
+	//private bool rightTurn;
 
 	void Start () {
 		mousePos = Input.mousePosition;
 		Cursor.lockState = CursorLockMode.Confined;
 		
 		transform.LookAt(player.transform.position);
-		
-		resetCurs = false;
 
+		dx = 0.0f;
 		offset = transform.position - player.transform.position;
+
+		//resetCurs = false;
+
+		//leftTurn = false;
+		//rightTurn = false;
 	}
 	
 	void Update() {
+		//Grabbing the x position of the mouse and comparing 
+		// to the left or right of the screen
+		float xVal = mousePos.x;
+		dx = 0;
+		if (xVal<=leftSide){
+			dx = 0 - ((leftSide - xVal)/7.5f * rSpeed);
+
+		}
+		if (xVal>=rightSide){
+			dx = ((xVal - rightSide)/7.5f) * rSpeed;
+		}
+
+		mousePos = Input.mousePosition;
+		/*
 		if (Input.GetKeyDown("space")){
 			resetCurs = true;
+			dx = 0;
 		}
 		if (resetCurs == true){
 			if(Input.GetKeyUp("space")){
 				resetCurs = false;
-				dx = 0;
 				mousePos = Input.mousePosition;
 			}
 		}else{
@@ -43,6 +67,7 @@ public class CameraController : MonoBehaviour {
 
 			mousePos = Input.mousePosition;
 		}
+		*/
 		
 	}
 	
