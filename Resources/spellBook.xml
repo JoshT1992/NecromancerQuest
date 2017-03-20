@@ -1,47 +1,73 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <spell_book>
-<spell>
-	<name>Lesser Magic Bolt</name>
-	<cost>0</cost>
-	<power>1</power>
-	<attacks>2</attacks>
-	<charge>10</charge>
-	<isArea>false</isArea>
-	<isRanged>true</isRanged>
-	<isPiercing>true</isPiercing>
-	<isCold>false</isCold>
-</spell>
-<spell>
-	<name>Magic Bolt</name>
-	<cost>1</cost>
-	<power>2</power>
-	<attacks>3</attacks>
-	<charge>10</charge>
-	<isArea>false</isArea>
-	<isRanged>true</isRanged>
-	<isPiercing>true</isPiercing>
-	<isCold>false</isCold>
-</spell>
-<spell>
-	<name>Greater Magic Bolt</name>
-	<cost>2</cost>
-	<power>2</power>
-	<attacks>5</attacks>
-	<charge>10</charge>
-	<isArea>false</isArea>
-	<isRanged>true</isRanged>
-	<isPiercing>true</isPiercing>
-	<isCold>false</isCold>
-</spell>
-<spell>
-	<name>Extreme Magic Bolt</name>
-	<cost>3</cost>
-	<power>2</power>
-	<attacks>7</attacks>
-	<charge>10</charge>
-	<isArea>false</isArea>
-	<isRanged>true</isRanged>
-	<isPiercing>true</isPiercing>
-	<isCold>false</isCold>
-</spell>
+	<spell name="Test Attack"
+		cost = "0"
+		power = "2"
+		attacks = "1"
+		charge = "5"
+		isArea = "false"
+		isRanged = "false"
+		isPiercing = "false"
+		isCold = "false"
+	/>
+	<spell name="Zap"
+		cost = "0"
+		power = "1"
+		attacks = "1"
+		charge = "6"
+		isArea = "true"
+		isRanged = "true"
+		isPiercing = "true"
+		isCold = "false"
+	/>
+	<spell name="Boom"
+		cost = "0"
+		power = "1"
+		attacks = "1"
+		charge = "8"
+		isArea = "true"
+		isRanged = "true"
+		isPiercing = "true"
+		isCold = "false"
+	/>
+	<spell name="Lesser Magic Bolt"
+		cost = "0"
+		power = "1"
+		attacks = "2"
+		charge = "10"
+		isArea = "false"
+		isRanged = "true"
+		isPiercing = "true"
+		isCold = "false"
+	/>
+	<spell name="Magic Bolt"
+		cost = "1"
+		power = "2"
+		attacks = "3"
+		charge = "10"
+		isArea = "false"
+		isRanged = "true"
+		isPiercing = "true"
+		isCold = "false"
+	/>
+	<spell name="Greater Magic Bolt"
+		cost = "2"
+		power = "2"
+		attacks = "5"
+		charge = "10"
+		isArea = "false"
+		isRanged = "true"
+		isPiercing = "true"
+		isCold = "false"
+	/>
+	<spell name="Extreme Magic Bolt"
+		cost = "3"
+		power = "2"
+		attacks = "7"
+		charge = "10"
+		isArea = "false"
+		isRanged = "true"
+		isPiercing = "true"
+		isCold = "false"
+	/>
 </spell_book>
