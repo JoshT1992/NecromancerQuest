@@ -1,4 +1,14 @@
-﻿using System.Collections;
+﻿/*
+The AI Controller manages all aspects of any non-player controlled units
+The AI is given a set of tasks that it must accomplish. The tasks can
+received either through orders from the player or through it's own
+low level intelligence.
+
+
+
+
+*/
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -44,6 +54,11 @@ public class AIController : MonoBehaviour {
 	}
 	
 	void Update() {
+		nav.speed = gameObject.GetComponent<stats>().speed/2;
+		
+		if (gameObject.GetComponent<stats>().slowPercent > 0)
+			say ("I was slowed today!");
+		
 		if (target == null) {
 			target = gameObject;
 			setOrders (0);
@@ -57,11 +72,11 @@ public class AIController : MonoBehaviour {
 		
 		if (orders[0]==0) { //No orders, decide for themselves
 			if (nearEnemy()) { //Attack nearest enemy
-				say ("I found an enemy!");
+				//say ("I found an enemy!");
 				target = nearestEnemy();
 				setOrders(2);
 			} else if (nearAlly()) { //Follow nearest Ally
-				say ("I found a friend!");
+				//say ("I found a friend!");
 				target = nearestAlly();
 				setOrders(1);
 			}
@@ -69,19 +84,19 @@ public class AIController : MonoBehaviour {
 		
 		if (orders[0]==1) { //Follow target
 			moveTo(target.transform.position, 10.0f);
-			say ("I'm following!");
+			//say ("I'm following!");
 		}
 		
 		if (orders[0]==2) { //Attack target
 			moveTo(target.transform.position, gameObject.GetComponent<stats>().range);
 			if (inRange)
 				attack();
-			say ("I'm attacking!");
+			//say ("I'm attacking!");
 		}
 		
 		if (orders[0]==3) { //Move to
 			moveTo (targetLoc, 0.0f);
-			say ("I'm moving!");
+			//say ("I'm moving!");
 		}
 		
 		if (Vector3.Distance (gameObject.transform.position, target.transform.position) <= gameObject.GetComponent<stats>().range)
