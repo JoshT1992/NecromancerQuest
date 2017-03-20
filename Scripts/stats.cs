@@ -1,12 +1,25 @@
-﻿using System.Collections;
+﻿/*
+** Stats covers all aspects of a units well, stats. Their hp, what team they
+** are on, how to take damage, it's all covered here. This script is shared
+** between both the player object and the AI objects. The type of unit
+** currently is hard coded in, but later on it will be done through
+** something smoother like XML.
+*/
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class stats : MonoBehaviour {
-	public int hp, maxhp, armour, speed, range, team, baseArmour, baseSpeed;
+	public int hp, maxhp, armour, range, team, baseArmour;
 	public string type;
 	
+	public float slowPercent, speed, baseSpeed;
+	
 	public GameObject healthCube;
+	
+	public GameObject shieldObject;
+	
+	public List<GameObject> shields;
 	
 	public List<GameObject> cubes;
 	
@@ -56,6 +69,9 @@ public class stats : MonoBehaviour {
 		hp = maxhp;
 		baseArmour = armour;
 		baseSpeed = speed;
+		slowPercent = 0;
+		
+		shields = new List<GameObject>();
 		
 		createHealth(hp);
 	}
@@ -83,6 +99,53 @@ public class stats : MonoBehaviour {
 			}
 			armour = baseArmour + minions.Count;
 		}
+		
+		//Slow application
+		if ((slowPercent < 1)&&(slowPercent > 0))
+			speed = baseSpeed * (1-slowPercent);
+		else if (slowPercent >= 1)
+			speed = 0;
+		
+		//Slow Decay
+		if (slowPercent > 0)
+			slowPercent *= 0.98f;
+		
+		//After a threshold of decay, slow drops
+		if (slowPercent < 0.001)
+			slowPercent = 0;
+			
+		if (armour > 0) {
+			if (shields.Count < armour) {
+				for (int i = shields.Count; i < armour; i++) {
+					GameObject newShield = Instantiate (shieldObject) as GameObject;
+					shields.Add (newShield);
+				}
+				
+				Vector3 pos = gameObject.transform.position;
+				
+				for (int i = 0; i < shields.Count; i++) {
+					float x,y,z;
+					float angle = Mathf.PI*2/(shields.Count);
+					x = pos.x + Mathf.Cos(angle*i)*1.2f;
+					y = pos.y;
+					z = pos.z + Mathf.Sin(angle*i)*1.2f;
+					
+					shields[i].transform.position = new Vector3(x,y,z);
+					
+					shields[i].transform.parent = gameObject.transform;
+					
+					shields[i].transform.LookAt (gameObject.transform.position);
+					
+					if (i >= baseArmour) {
+						shields[i].GetComponent<Renderer>().material.color = new Color (0,1,1,1);
+					}
+				}
+			}
+			
+			if (shields.Count > armour) {
+				shields.RemoveAt (shields.Count-1);
+			}
+		}
 	}
 	
 	//When a unit takes damage from any source, a takeHit is called
@@ -92,8 +155,7 @@ public class stats : MonoBehaviour {
 	//Finally if none of the above conditions are met, damage will be applied normally after having the unit's armour value subtracted from it.
 	public void takeHit (int dmg, bool isPiercing, bool isCold) {
 		if (isCold) {
-			float slowAmount = dmg/hp;
-			speed = (int)(speed*(1-slowAmount));
+			slowPercent += ((float)dmg/(float)hp);
 		} else if (isPiercing) {
 			hp -= dmg;
 			remCubes += dmg;

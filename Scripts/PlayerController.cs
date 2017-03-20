@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿/*
+** The player controller manages all aspect of input from the player.
+** It allows the player to move and use abilities.
+**
+*/
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,6 +24,8 @@ public class PlayerController : MonoBehaviour {
 	public GameObject target;
 	
 	private float speed;
+	
+	public abilityController[] abilities;
 
 	void Start () {
 		rb = gameObject.GetComponent<Rigidbody>();
@@ -29,6 +36,8 @@ public class PlayerController : MonoBehaviour {
 		line = gameObject.GetComponent<LineRenderer>();
 		line.enabled = false;
 		
+		abilities = gameObject.GetComponents<abilityController>();
+		
 		selectionSphere.SetActive(false);
 		
 		speed = gameObject.GetComponent<stats>().speed/2;
@@ -37,6 +46,8 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void Update () {
+		speed = gameObject.GetComponent<stats>().speed/2;
+		
 		if (Input.GetKey("a"))
 			hForce = -1.0f;
 		if (Input.GetKey("d"))
@@ -45,7 +56,16 @@ public class PlayerController : MonoBehaviour {
 			vForce = -1.0f;
 		if (Input.GetKey("w"))
 			vForce = 1.0f;
-		
+			
+		if ((Input.GetKey("1"))&&(abilities[0].isCharged()))
+			abilities[0].Attack();
+		if ((Input.GetKey("2"))&&(abilities[1].isCharged()))
+			abilities[1].Attack();
+		if ((Input.GetKey("3"))&&(abilities[2].isCharged()))
+			abilities[2].Attack();
+		if ((Input.GetKey("4"))&&(abilities[3].isCharged()))
+			abilities[3].Attack();
+	
 		if (Input.GetMouseButton(0)) {
 			selectionSphere.GetComponent<selectionControl>().selectionType = 0;
 			StopCoroutine("SelectRay");

@@ -1,4 +1,12 @@
-﻿using System.Collections;
+﻿/*
+** The Ability Controller manages all aspects of inGame abilities. These
+** include anything from simple attacks, dodge rolling, and spells. It
+** handles placing different effects on spell objects, as well as the
+** three general deliveries of attack (area, missile, or melee).
+**
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -47,8 +55,8 @@ public class abilityController : MonoBehaviour {
 				chargeMax = int.Parse(node.Attributes["charge"].InnerText) * 100;
 				isArea = bool.Parse(node.Attributes["isArea"].InnerText);
 				isRanged = bool.Parse(node.Attributes["isRanged"].InnerText);
-				isPiercing = bool.Parse(node.Attributes["isPiercing"].InnerText);
-				isCold = bool.Parse(node.Attributes["isCold"].InnerText);
+				effects[0] = bool.Parse(node.Attributes["isPiercing"].InnerText);
+				effects[1] = bool.Parse(node.Attributes["isCold"].InnerText);
 				abilityFound = true;
 				break;
 			}
@@ -67,7 +75,7 @@ public class abilityController : MonoBehaviour {
 	}
 	
 	void Update () {
-		if (charge < chargeMax)
+		if ((charge < chargeMax)&&(chargeMax > 0))
 			charge++;
 	}
 	
@@ -78,8 +86,10 @@ public class abilityController : MonoBehaviour {
 	
 	IEnumerator launchAttack () {
 		GameObject target;
-		if ((target=gameObject.GetComponent<AIController>().target)==null)
-			 target = gameObject.GetComponent<PlayerController>().target;
+		if (gameObject.GetComponent<AIController>()==null)
+			target = gameObject.GetComponent<PlayerController>().target;
+		else
+			target = gameObject.GetComponent<AIController>().target;
 		
 		for (int k = 0; k < attacks; k++) {
 			if (target!=null) {
