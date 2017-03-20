@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <spell_book>
+	<spell name="Nothing"
+		cost = "0"
+		power = "0"
+		attacks = "0"
+		charge = "-1"
+		isArea = "false"
+		isRanged = "false"
+		isPiercing = "false"
+		isCold = "false"
+	/>
 	<spell name="Test Attack"
 		cost = "0"
 		power = "2"
@@ -12,13 +22,13 @@
 	/>
 	<spell name="Zap"
 		cost = "0"
-		power = "1"
+		power = "10"
 		attacks = "1"
 		charge = "6"
 		isArea = "true"
 		isRanged = "true"
 		isPiercing = "true"
-		isCold = "false"
+		isCold = "true"
 	/>
 	<spell name="Boom"
 		cost = "0"

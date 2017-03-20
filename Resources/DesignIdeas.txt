@@ -1,3 +1,5 @@
+Any ideas can go here. Nothing here is 100% certain.
+
 Stats:
 	Health
 	Power
