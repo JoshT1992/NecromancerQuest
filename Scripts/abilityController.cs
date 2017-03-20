@@ -9,9 +9,10 @@ public class abilityController : MonoBehaviour {
 	public int power, chargeMax, charge, attacks, cost;
 	public bool isMagic, isRanged, isArea, isCold, isPiercing;
 	public bool[] effects;
-	public string name;
+	public string abilityName;
 	
 	public GameObject missile;
+	public GameObject melee;
 	public GameObject area;
 	
 	public GameObject loadXml;
@@ -36,18 +37,32 @@ public class abilityController : MonoBehaviour {
 		
 		XmlDocument xml = loadXml.GetComponent<loadXml>().xmlDoc;
 		
+		bool abilityFound = false;
+		
 		foreach (XmlNode node in xml.DocumentElement.ChildNodes) {
-			if (node.Attributes["name"].InnerText==name) {
+			if (node.Attributes["name"].InnerText==abilityName) {
 				power = int.Parse(node.Attributes["power"].InnerText);
 				attacks = int.Parse(node.Attributes["attacks"].InnerText);
 				cost = int.Parse(node.Attributes["cost"].InnerText);
-				chargeMax = int.Parse(node.Attributes["charge"].InnerText);
+				chargeMax = int.Parse(node.Attributes["charge"].InnerText) * 100;
 				isArea = bool.Parse(node.Attributes["isArea"].InnerText);
 				isRanged = bool.Parse(node.Attributes["isRanged"].InnerText);
 				isPiercing = bool.Parse(node.Attributes["isPiercing"].InnerText);
 				isCold = bool.Parse(node.Attributes["isCold"].InnerText);
+				abilityFound = true;
 				break;
 			}
+		}
+		
+		if (!abilityFound) {
+			power = 0;
+			attacks = 0;
+			cost = 0;
+			chargeMax = -1;
+			isArea = false;
+			isRanged = false;
+			isPiercing = false;
+			isCold = false;
 		}
 	}
 	
@@ -56,51 +71,94 @@ public class abilityController : MonoBehaviour {
 			charge++;
 	}
 	
-	void Attack () {
+	public void Attack () {
+		charge = 0;
+		StartCoroutine("launchAttack");
+	}
+	
+	IEnumerator launchAttack () {
 		GameObject target;
 		if ((target=gameObject.GetComponent<AIController>().target)==null)
 			 target = gameObject.GetComponent<PlayerController>().target;
-		if (isArea) { //AoE Attack
-			//Make the AoE object at the target location
-			GameObject areaObject = Instantiate (area) as GameObject;
-			if (isRanged)
-				areaObject.transform.position = target.transform.position;
-			else
-				areaObject.transform.position = gameObject.transform.position;
-			//Scan for each object in the AoE
-			List<GameObject> objects = areaObject.GetComponent<vision>().creatures;
-			//Apply power to all of them
-			for (int i = 0; i < objects.Count; i++) {
-				if (objects[i].GetComponent<stats>().team != gameObject.GetComponent<stats>().team)
-					objects[i].GetComponent<stats>().takeHit(Random.Range(power-1,power+1), effects[0], effects[1]);
-			}
-			//Destroy the Area
-			Destroy (areaObject);
-		} else if (isRanged) { //Ranged Attack
-			float dist = Vector3.Distance (gameObject.transform.position, target.transform.position);
-				if (dist <= GetComponent<stats>().range) {
-					Vector3 dir = target.transform.position - gameObject.transform.position;
-					dir.Normalize();
-					
-					GameObject missileObject = Instantiate (missile) as GameObject;
-					
-					missileObject.transform.position = gameObject.transform.position;
-					missileObject.transform.up = dir;
-					missileObject.GetComponent<Rigidbody>().AddForce (dir*2000);
-					
-					missileObject.GetComponent<missileController>().dmg = Random.Range(power-1,power+1);
-					missileObject.GetComponent<missileController>().isPiercing = effects[0];
-					missileObject.GetComponent<missileController>().isCold = effects[1];
-					missileObject.GetComponent<missileController>().team = gameObject.GetComponent<stats>().team;
+		
+		for (int k = 0; k < attacks; k++) {
+			if (target!=null) {
+				if (isArea) { //AoE Attack
+					//Make the AoE object at the target location
+					Vector3 centerPoint = new Vector3(0,0,0);
+					if (isRanged)
+						centerPoint = target.transform.position;
+					else
+						centerPoint = gameObject.transform.position;
+					//Make the boom
+					StartCoroutine ("testArea", centerPoint);
+					//Get the list of objects the unit can see
+					List<GameObject> objects = gameObject.GetComponent<AIController>().vision.GetComponent<vision>().creatures;
+					//Apply power to all of them if they are enemies and within 2 meters
+					for (int i = 0; i < objects.Count; i++) {
+						if ((objects[i].GetComponent<stats>().team != gameObject.GetComponent<stats>().team)&&(Vector3.Distance(centerPoint, objects[i].transform.position) <= 2))
+							//objects[i].GetComponent<stats>().takeHit(Random.Range(power-1,power+1), effects[0], effects[1]);
+							objects[i].GetComponent<stats>().takeHit(power, effects[0], effects[1]);
+					}
+				} else if (isRanged) { //Ranged Attack
+					float dist = Vector3.Distance (gameObject.transform.position, target.transform.position);
+						if (dist <= GetComponent<stats>().range) {
+							Vector3 dir = target.transform.position - gameObject.transform.position;
+							dir.Normalize();
+							
+							GameObject missileObject = Instantiate (missile) as GameObject;
+							
+							missileObject.transform.position = new Vector3 (gameObject.transform.position.x,gameObject.transform.position.y+1,gameObject.transform.position.z);
+							missileObject.transform.up = dir;
+							missileObject.GetComponent<Rigidbody>().AddForce (dir*1500);
+							
+							//missileObject.GetComponent<missileController>().dmg = Random.Range(power-1,power+1);
+							missileObject.GetComponent<missileController>().dmg = power;
+							missileObject.GetComponent<missileController>().isPiercing = effects[0];
+							missileObject.GetComponent<missileController>().isCold = effects[1];
+							missileObject.GetComponent<missileController>().team = gameObject.GetComponent<stats>().team;
+						}
+				} else if (gameObject.GetComponent<AIController>().inRange) { //Melee attack
+					//target.GetComponent<stats>().takeHit(Random.Range(power-1,power+1), effects[0], effects[1]);
+					target.GetComponent<stats>().takeHit(power, effects[0], effects[1]);
+					StartCoroutine ("testAttack", target);
 				}
-		} else if (gameObject.GetComponent<AIController>().inRange) { //Melee attack
-			target.GetComponent<stats>().takeHit(Random.Range(power-1,power+1), effects[0], effects[1]);
+				
+				yield return new WaitForSeconds(0.3f);
+			}
+		}
+	}
+	
+	IEnumerator testAttack (GameObject target) {
+		GameObject slashObject = Instantiate (melee) as GameObject;
+		
+		slashObject.transform.position = gameObject.transform.position;
+		slashObject.transform.parent = gameObject.transform;
+		slashObject.transform.up = gameObject.transform.right;
+		
+		for (int i = 0; i < 100; i++) {
+			slashObject.transform.Rotate (gameObject.transform.right, 500*Time.deltaTime);
+			yield return null;
 		}
 		
-		charge = 0;
+		Destroy (slashObject);
+	}
+	
+	IEnumerator testArea (Vector3 target) {
+		GameObject areaObject = Instantiate (area) as GameObject;
+		
+		areaObject.transform.position = target;
+		for (int i = 0; i < 100; i++) {
+			areaObject.transform.localScale *= 1.01f;
+			yield return null;
+		}
+		
+		Destroy (areaObject);
 	}
 	
 	public bool isCharged () {
-		return (charge>=chargeMax);
+		if (chargeMax >= 0)
+			return (charge>=chargeMax);
+		return false;
 	}
 }

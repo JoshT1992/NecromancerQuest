@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class stats : MonoBehaviour {
-	public int hp, maxhp, power, armour, speed, range, team;
+	public int hp, maxhp, armour, speed, range, team, baseArmour, baseSpeed;
 	public string type;
 	
 	public GameObject healthCube;
 	
 	public List<GameObject> cubes;
 	
-	private float radius;
+	public List<GameObject> minions;
 	
 	private int remCubes;
 	
@@ -19,7 +19,6 @@ public class stats : MonoBehaviour {
 	void Start () {
 		if (type=="vivianna") {
 			maxhp = 30;
-			power = 1;
 			armour = 0;
 			speed = 12;
 			range = 1;
@@ -27,15 +26,13 @@ public class stats : MonoBehaviour {
 		}
 		if (type=="zombie") {
 			maxhp = 10;
-			power = 4;
 			armour = 0;
 			speed = 4;
 			range = 1;
 			team = 1;
 		}
 		if (type=="guard") {
-			maxhp = 8;
-			power = 4;
+			maxhp = 6;
 			armour = 1;
 			speed = 6;
 			range = 1;
@@ -43,27 +40,23 @@ public class stats : MonoBehaviour {
 		}
 		if (type=="archer") {
 			maxhp = 6;
-			power = 2;
 			armour = 0;
 			speed = 6;
-			range = 12;
+			range = 120;
 			team = 2;
 		}
 		if (type=="wizard") {
-			maxhp = 6;
-			power = 3;
+			maxhp = 10;
 			armour = 0;
-			speed = 3;
-			range = 12;
+			speed = 6;
+			range = 120;
 			team = 2;
 		}
 		
 		hp = maxhp;
-		if (maxhp <= 27) {
-			radius = 0.2f;
-		} else if (maxhp > 27) {
-			radius = 0.4f;
-		}
+		baseArmour = armour;
+		baseSpeed = speed;
+		
 		createHealth(hp);
 	}
 	
@@ -80,6 +73,15 @@ public class stats : MonoBehaviour {
 			}
 			remCubes--;
 			numCubes--;
+		}
+		
+		//For each minion someone controls, they get a +1 shield bonus to their armour
+		if (minions != null) {
+			for (int i = 0; i < minions.Count; i++) {
+				if (minions[i]==null)
+					minions.Remove(minions[i]);
+			}
+			armour = baseArmour + minions.Count;
 		}
 	}
 	
@@ -106,17 +108,22 @@ public class stats : MonoBehaviour {
 	public void createHealth (int health) {
 		int num = 0;
 		int col = 0;
+		
 		Vector3 center = new Vector3 (gameObject.transform.position.x,gameObject.transform.position.y+2,gameObject.transform.position.z);
-		for (float i = -radius; i <= radius; i+=0.2f) {
-			for (float j = -radius; j <= radius; j+=0.2f) {
-				for (float k = -radius; k <= radius; k+=0.2f) {
-					Vector3 pos = new Vector3(j,i,k);
+		
+		float radius = (Mathf.Pow (hp, 1.0f/3.0f))/2.0f;
+		
+		for (float i = -radius; i <= radius; i++) {
+			for (float j = -radius; j <= radius; j++) {
+				for (float k = -radius; k <= radius; k++) {
+					Vector3 pos = new Vector3(j*0.2f,i*0.2f,k*0.2f);
 					pos += center;
 					
 					GameObject newCube = Instantiate (healthCube) as GameObject;
 					newCube.transform.position = pos;
 					newCube.transform.parent = gameObject.transform;
 					Color c = new Color (0,0,0,0);
+					
 					if (col==0)
 						c = new Color (0,0.8f,0.2f,1);
 					if (col==1)

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AIController : MonoBehaviour {
 
-	private Rigidbody rb;
 	public GameObject target;
 	public Vector3 targetLoc;
 	
@@ -13,11 +12,9 @@ public class AIController : MonoBehaviour {
 	
 	public bool inRange;
 	
-	private GameObject vision;
+	public GameObject vision;
 	
 	public abilityController[] abilities;
-	
-	public GameObject missile;
 	
 	public UnityEngine.AI.NavMeshAgent nav;
 	
@@ -27,7 +24,6 @@ public class AIController : MonoBehaviour {
 	private int reCalculator;
 
 	void Start () {
-		rb = GetComponent<Rigidbody>();
 		vision = gameObject.transform.GetChild(0).gameObject;
 		isSelected = false;
 		inRange = false;
@@ -43,6 +39,7 @@ public class AIController : MonoBehaviour {
 	public void setOrders (int order) {
 		orders.Clear();
 		orders.Add (order);
+		inRange = false;
 		reCalculator = 100;
 	}
 	
@@ -76,16 +73,21 @@ public class AIController : MonoBehaviour {
 		}
 		
 		if (orders[0]==2) { //Attack target
-			if (Vector3.Distance (gameObject.transform.position, target.transform.position) > gameObject.GetComponent<stats>().range)
-				moveTo(target.transform.position, 3.0f);
-			attack();
+			moveTo(target.transform.position, gameObject.GetComponent<stats>().range);
+			if (inRange)
+				attack();
 			say ("I'm attacking!");
 		}
 		
 		if (orders[0]==3) { //Move to
-			moveTo (targetLoc, 3.0f);
+			moveTo (targetLoc, 0.0f);
 			say ("I'm moving!");
 		}
+		
+		if (Vector3.Distance (gameObject.transform.position, target.transform.position) <= gameObject.GetComponent<stats>().range)
+			inRange = true;
+		else
+			inRange = false;
 		
 		if (GetComponent<stats>().isDead()) {
 			Destroy(gameObject);
@@ -95,11 +97,13 @@ public class AIController : MonoBehaviour {
 	}
 	
 	void moveTo (Vector3 location, float minDist) {
-		if (((gameObject.transform.position - location).sqrMagnitude) > minDist) {
-			if (reCalculator >= 100)
+		if (reCalculator >= 100) {
+			if (((gameObject.transform.position - location).sqrMagnitude) > minDist) {
 				nav.destination = location;
-		} else if (orders[0]==3) {
-			setOrders(0);
+				nav.stoppingDistance = minDist;
+			} else if (orders[0]==3) {
+				setOrders(0);
+			}
 		}
 	}
 	
@@ -190,7 +194,8 @@ public class AIController : MonoBehaviour {
 	
 	void attack() {
 		for (int i = 0; i < abilities.Length; i++) {
-			
+			if (abilities[i].isCharged())
+				abilities[i].Attack();
 		}
 	}
 	
@@ -229,14 +234,10 @@ public class AIController : MonoBehaviour {
 	}*/
 	
 	void OnTriggerEnter (Collider other) {
-		if ((other.gameObject==target)&&(other.CompareTag("unit"))) {
-			inRange = true;
-		}
+		
 	}
 	
 	void OnTriggerExit (Collider other) {
-		if ((other.gameObject==target)&&(other.CompareTag("unit"))) {
-			inRange = false;
-		}
+		
 	}
 }

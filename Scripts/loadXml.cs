@@ -7,12 +7,9 @@ using System.IO;
 public class loadXml : MonoBehaviour {
 	public XmlDocument xmlDoc;
 
-	void Start() {
+	void Awake() {
 		xmlDoc = new XmlDocument();
 		xmlDoc.Load ("Assets\\Resources\\spellBook.xml");
 	}
-	
-	void Update() {
-		
-	}
+
 }
