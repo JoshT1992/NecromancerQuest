@@ -1,4 +1,10 @@
-﻿using System.Collections;
+﻿/*
+** The Camera Controller handles all aspects of the camera. It is generally
+** set to follow the player and move based on cursor movements. Currently
+** it is extremely basic and mostly just made to have something working for
+** debugging/testing.
+*/
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

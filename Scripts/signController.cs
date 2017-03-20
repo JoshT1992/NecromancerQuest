@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿/*
+** Deletes signs/messages after about 10 seconds, so they don't stay forever.
+**
+*/
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;

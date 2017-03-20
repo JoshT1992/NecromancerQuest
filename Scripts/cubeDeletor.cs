@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿/*
+** Prevents cubes from existing forever, as well as adding a little
+** effect when they break off from the health displays.
+*/
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

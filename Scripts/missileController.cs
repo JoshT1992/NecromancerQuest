@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿/*
+** When a missile object is created, this is attached to it. This let's the
+** missile object behave correctly and detonate when it hits an enemy
+** or a piece of terrain.
+*/
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿/*
+** The selectionControl script handles the player's ability to select
+** allies and enemies to deliver orders such as follow or attack.
+** 
+*/
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,8 +45,7 @@ public class selectionControl : MonoBehaviour {
 					units.Add (other.gameObject);
 					other.gameObject.GetComponent<AIController>().isSelected = true;
 				}
-			}
-			if (selectionType==1) {
+			}else if (selectionType==1) {
 				int ord = 0;
 				
 				if (other.gameObject.GetComponent<stats>().team==2) {
@@ -55,6 +59,7 @@ public class selectionControl : MonoBehaviour {
 					units[i].GetComponent<AIController>().isSelected = false;
 				}
 				units.Clear();
+				player.GetComponent<PlayerController>().target = other.gameObject;
 			}
 		} else if (selectionType==1) {
 			if (other.gameObject.CompareTag("terrain")) {

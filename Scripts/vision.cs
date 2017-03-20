@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿/*
+** Handles the ability for AI to see other AI. Currently the player is
+** "invisible" to them but this will be changed eventually.
+**
+*/
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

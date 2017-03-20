@@ -1,12 +1,8 @@
 ﻿/*
-The AI Controller manages all aspects of any non-player controlled units
-The AI is given a set of tasks that it must accomplish. The tasks can
-received either through orders from the player or through it's own
-low level intelligence.
-
-
-
-
+** The AI Controller manages all aspects of any non-player controlled units
+** The AI is given a set of tasks that it must accomplish. The tasks can
+** received either through orders from the player or through it's own
+** low level intelligence.
 */
 using System.Collections;
 using System.Collections.Generic;
